@@ -255,7 +255,7 @@ for i in range(0, TotalReadings // TotalDevices-1):
 	for i in range(0 , TotalDevices):
 		DeviceCode = int(ratingData.iloc[i]['deviceCode_deviceCode']) #Own Device ID fitted in vehicle
 		CurrentDetails = data[(data['deviceCode_deviceCode'].isin([str(DeviceCode)])) & (data['deviceCode_time_recordedTime_$date'].isin([str(strtimeNow)]))]
-		print(DeviceCode,CurrentDetails)
+		#print(DeviceCode,CurrentDetails)
 		CurrentLatitude = float(CurrentDetails['deviceCode_location_latitude'].values[0])
 		CurrentLongitude = float(CurrentDetails['deviceCode_location_longitude'].values[0])
 

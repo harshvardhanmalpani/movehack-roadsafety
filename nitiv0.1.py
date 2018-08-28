@@ -23,9 +23,10 @@ IdleRatingIncreaseParameter = 0.1
 OneLatitude=111000	# Distance in one degree of latitude in metres
 OneLongitude=87870	# Distance in one degree of longitude in metres
 
-
-ratingData = pd.read_csv(r'H:\Book1.csv', index_col = False)
-data = pd.read_csv(r'H:\YASH.csv', index_col = False)
+ratingFile='ratings.csv'
+datasetFile='dataset.csv'
+ratingData = pd.read_csv(ratingFile, index_col = False)
+data = pd.read_csv(datasetFile, index_col = False)
 
 timeNow = datetime.datetime(2018, 8, 26, 17, 13, 13)	# timestamp will be changed to required time at which the set of details is received, current time is just assumed here
 strtimeNow = str(timeNow.isoformat())
@@ -42,7 +43,7 @@ def IncreaseRating(DeviceCode):
 	for index, row in ratingData.iterrows():
 			if str(row['deviceCode_deviceCode']) == str(DeviceCode):
 				ratingData['Ratings'][index] = str(NewRating)
-	ratingData.to_csv(r'H:\1.csv')
+	ratingData.to_csv(ratingFile)
 
 def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, VehicleinArea):
 	CurrentSpeed = int(CurrentDetails['deviceCode_pyld_speed'].values[0])
@@ -64,7 +65,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 				ratingData['Ratings'][index] = str(NewRating)
 		
 		
-		ratingData.to_csv(r'H:\1.csv')
+		ratingData.to_csv(ratingFile)
 		
 		print( "Harsh Acceleration")
 		
@@ -108,7 +109,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 							ratingData['Ratings'][index] = str(NewRating)
 			
 			
-					ratingData.to_csv(r'H:\1.csv')
+					ratingData.to_csv(ratingFile)
 					
 					print( 'Harsh Braking')
 			else:
@@ -119,7 +120,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 					if str(row['deviceCode_deviceCode']) == str(DeviceCode):
 						ratingData['Ratings'][index] = str(NewRating)
 						
-				ratingData.to_csv(r'H:\1.csv')
+				ratingData.to_csv(ratingFile)
 				print('Harsh Braking')
 			
 	else:
@@ -150,7 +151,7 @@ def OverspeedingCheck(DeviceCode, CurrentSpeed, SpeedLimit):
 				ratingData['Ratings'][index] = str(NewRating)
 		
 		
-		ratingData.to_csv(r'H:\1.csv')
+		ratingData.to_csv(ratingFile)
 
 		print('Rating Decreased, OverSpeeding')
 		
@@ -166,7 +167,7 @@ def UpdateRating(DeviceID):
 		if str(row['deviceCode_deviceCode']) == str(DeviceCode):
 			ratingData['Ratings'][index] = str(NewRating)
 	
-	ratingData.to_csv(r'H:\1.csv')
+	ratingData.to_csv(ratingFile)
 	
 	
 	print('Ratings Updates due to Collision')
@@ -252,7 +253,7 @@ def CalculateDistanceDifference(LatitudeSelf,LongitudeSelf,Latitude,Longitude): 
 for i in range(0, TotalReadings // TotalDevices-1):	
 
 	for i in range(0 , TotalDevices):
-		DeviceCode = str(ratingData.iloc[i]['deviceCode_deviceCode']) #Own Device ID fitted in vehicle
+		DeviceCode = int(ratingData.iloc[i]['deviceCode_deviceCode']) #Own Device ID fitted in vehicle
 		CurrentDetails = data[(data['deviceCode_deviceCode'].isin([str(DeviceCode)])) & (data['deviceCode_time_recordedTime_$date'].isin([str(strtimeNow)]))]
 		print(DeviceCode,CurrentDetails)
 		CurrentLatitude = float(CurrentDetails['deviceCode_location_latitude'].values[0])

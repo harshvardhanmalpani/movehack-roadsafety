@@ -67,7 +67,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 		
 		ratingData.to_csv(ratingFile)
 		
-		print( "Harsh Acceleration")
+		print( "Harsh Acceleration, Rating Decreased")
 		
 	elif PreviousSpeed > CurrentSpeed and MaxAllowedNegativeChange < abs(SpeedDifference):
 		CurrentLatitude = CurrentDetails['deviceCode_location_latitude']
@@ -86,7 +86,6 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 			SuspectLatitude = CurrentSuspect['deviceCode_location_latitude']
 			SuspectLongitude = CurrentSuspect['deviceCode_location_longitude']
 			DistanceFound = CalculateDistanceDifference(CurrentLatitude, CurrentLongitude, SuspectLatitude, SuspectLongitude)
-			print('\n\n\n',DistanceFound,'\n\n')
 			if (DistanceFound < 10).all():
 				LatitudeDif = PastOwnLatitude - CurrentLatitude
 				LongitudeDif = PastOwnLongitude - CurrentLongitude
@@ -111,7 +110,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 			
 					ratingData.to_csv(ratingFile)
 					
-					print( 'Harsh Braking')
+					print('Harsh Braking, Rating Decreased')
 			else:
 				OwnDetailsFromRating = ratingData.loc[ratingData['deviceCode_deviceCode'].isin([str(DeviceCode)])]	#getting own ratings
 				OwnRatings = OwnDetailsFromRating['Ratings']
@@ -121,7 +120,7 @@ def BrakingAndAcceleration(DeviceCode, CurrentDetails, VehiclePreviousStats, Veh
 						ratingData['Ratings'][index] = str(NewRating)
 						
 				ratingData.to_csv(ratingFile)
-				print('Harsh Braking')
+				print('Harsh Braking, Rating Decreased')
 			
 	else:
 		return False
@@ -170,7 +169,7 @@ def UpdateRating(DeviceID):
 	ratingData.to_csv(ratingFile)
 	
 	
-	print('Ratings Updates due to Collision')
+	print('Rating decreased due to Collision')
 	
 
 def CollisionAlarm(DeviceApproaching_ID):
@@ -301,7 +300,7 @@ for i in range(0, TotalReadings // TotalDevices-1):
 		
 		if not BrakingAndAccelerationResult and (OverVar == False) and CollisionFlag == 1:
 			IncreaseRating(DeviceCode)
-			print('Increased')
+			print(DeviceCode,'Increased')
 		
 		
 	timeNow = timeNow + datetime.timedelta(0,HeartBeat)
